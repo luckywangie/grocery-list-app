@@ -1,17 +1,29 @@
 import React, { useState } from "react";
+import Filter from "./Filter";
 import Item from "./Item";
 
 const items = [
-  { id: 1, name: "Apples", category: "Produce" },
-  { id: 2, name: "Chicken", category: "Meat" },
-  { id: 3, name: "Milk", category: "Dairy" },
+  { id: 1, name: "Yogurt", category: "Dairy" },
+  { id: 2, name: "Pomegranate", category: "Produce" },
+  { id: 3, name: "Juice", category: "Produce" },
+  { id: 4, name: "String Cheese", category: "Dairy" },
+  { id: 5, name: "Cookies", category: "Dessert" },
 ];
 
 function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [cartItems, setCartItems] = useState([]);
 
-  function handleCategoryChange(event) {
-    setSelectedCategory(event.target.value);
+  function handleFilterChange(category) {
+    setSelectedCategory(category);
+  }
+
+  function toggleCartItem(itemName) {
+    setCartItems((prevCartItems) =>
+      prevCartItems.includes(itemName)
+        ? prevCartItems.filter((item) => item !== itemName)
+        : [...prevCartItems, itemName]
+    );
   }
 
   const filteredItems =
@@ -21,15 +33,16 @@ function ShoppingList() {
 
   return (
     <div>
-      <select onChange={handleCategoryChange} value={selectedCategory}>
-        <option value="All">All</option>
-        <option value="Produce">Produce</option>
-        <option value="Meat">Meat</option>
-        <option value="Dairy">Dairy</option>
-      </select>
+      <Filter selectedCategory={selectedCategory} onCategoryChange={handleFilterChange} />
       <ul>
         {filteredItems.map((item) => (
-          <Item key={item.id} name={item.name} />
+          <Item
+            key={item.id}
+            name={item.name}
+            category={item.category}
+            isInCart={cartItems.includes(item.name)}
+            onToggleCart={() => toggleCartItem(item.name)}
+          />
         ))}
       </ul>
     </div>

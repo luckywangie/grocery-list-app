@@ -1,21 +1,17 @@
 import React, { useState } from "react";
+import Header from "./Header";
 import ShoppingList from "./ShoppingList";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  function handleDarkModeToggle() {
+  function toggleDarkMode() {
     setIsDarkMode((prevMode) => !prevMode);
   }
 
   return (
     <div className={`App ${isDarkMode ? "dark" : "light"}`}>
-      <header>
-        <h1>Grocery List</h1>
-        <button onClick={handleDarkModeToggle}>
-          {isDarkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-      </header>
+      <Header isDarkMode={isDarkMode} onToggleDarkMode={toggleDarkMode} />
       <ShoppingList />
     </div>
   );
